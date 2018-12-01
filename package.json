@@ -1,0 +1,29 @@
+{
+  "name": "maestro",
+  "version": "0.0.1",
+  "description": "Serverless plug-in to orchestrate multiple sls projects",
+  "main": "index.js",
+  "dependencies": {
+    "simple-git": "^1.107.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lhmachado/maestro.git"
+  },
+  "keywords": [
+    "sls",
+    "serverless",
+    "multiple",
+    "projects"
+  ],
+  "author": "Luiz Henrique Leal Machado",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lhmachado/maestro/issues"
+  },
+  "homepage": "https://github.com/lhmachado/maestro#readme"
+}
