@@ -35,7 +35,6 @@ class MaestroPlugin {
   deploy() {
     this.maestro.forEach(object => {
       Object.keys(object).forEach(key => {
-        let projectName = key;
         let project = object[key];
         project.name = key;
         if (project.git) {
@@ -53,23 +52,27 @@ class MaestroPlugin {
     });
   }
 
+  log(stringLog) {
+    this.serverless.cli.log(stringLog);
+  }
+
   async execute(_command, project) {
     const options = {
       cwd: project.path
     };
 
-    this.serverless.cli.log(`Started sls ${_command} on ${project.name}`);
-    const { stdout, stderr } = await exec(`sls ${_command}`, options);
-    if (stdout) {
-      this.serverless.cli.log(
-        `Working dir ${project.path}:${_command}:${stdout}`
-      );
-    } else {
-      this.serverless.cli.log("stderr:", stderr);
+    this.log(`Started sls ${_command} on ${project.name}`);
+
+    // const { stdout, stderr } = await exec(`ls`);
+
+    const { stdout, stderr } = await exec("find . -type f | wc -l");
+    if (stderr) {
+      this.log(`stderr: ${stderr}`);
     }
-    this.serverless.cli.log(
-      `Finished sls ${_command} on ${Object.keys(project)[0]}`
-    );
+
+    this.log(`Working dir ${project.path}:${_command}:${stdout}`);
+
+    this.log(`Finished sls ${_command} on ${Object.keys(project)[0]}`);
   }
 }
 
