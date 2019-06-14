@@ -1,6 +1,7 @@
 "use strict";
 const paths = require("path");
 const { execSync } = require("child_process");
+const figlet = require("figlet");
 
 class MaestroPlugin {
   constructor(serverless, options) {
@@ -47,6 +48,13 @@ class MaestroPlugin {
   }
 
   run() {
+    this.serverlessLog(
+      figlet.textSync("Maestro --->", {
+        font: "Ghost"
+        // horizontalLayout: "default",
+        // verticalLayout: "default"
+      })
+    );
     this.maestro.forEach(object => {
       Object.keys(object).forEach(key => {
         let project = object[key];
@@ -60,21 +68,22 @@ class MaestroPlugin {
   }
 
   runCommand(project) {
-    const { name, path, command, params } = project;
+    const { name, path, commands } = project;
+    this.serverlessLog(`Maestro started to play on "${name}"`);
 
-    this.serverlessLog(
-      `##############################################################`
-    );
-    this.serverlessLog(`Maestro is playing "${command}" on "${name}"`);
-    execSync(`${command} -v`, {
-      stdio: [this.stdin, this.stdout, this.stderr],
-      cwd: paths.resolve(path)
+    commands.forEach(command => {
+      const workDir = paths.resolve(path);
+      this.serverlessLog(`Maestro in "${workDir}"`);
+      this.serverlessLog(`Maestro running "${command}" `);
+      execSync(`${command}`, {
+        stdio: [this.stdin, this.stdout, this.stderr],
+        cwd: workDir
+      });
+      this.serverlessLog(`Maestro in "${workDir}"`);
+      this.serverlessLog(`Maestro finished "${command}"`);
     });
 
-    this.serverlessLog(`Maestro ended "${command}" on "${name}"`);
-    this.serverlessLog(
-      `##############################################################`
-    );
+    this.serverlessLog(`Maestro ended his play on "${name}"`);
   }
 }
 
