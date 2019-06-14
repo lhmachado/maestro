@@ -1,9 +1,10 @@
 {
-  "name": "maestro",
+  "name": "maestro-serverless-plugin",
   "version": "0.0.1",
   "description": "Serverless plug-in to orchestrate multiple sls projects",
   "main": "index.js",
   "dependencies": {
+    "figlet": "^1.2.3",
     "simple-git": "^1.107.0"
   },
   "devDependencies": {},

@@ -60,18 +60,18 @@ class MaestroPlugin {
   }
 
   runCommand(project) {
-    const { name, path, command } = project;
+    const { name, path, command, params } = project;
+
     this.serverlessLog(
       `##############################################################`
     );
-    this.serverlessLog(`Maestro is playing "${command}" on ${name}`);
-
+    this.serverlessLog(`Maestro is playing "${command}" on "${name}"`);
     execSync(`${command} -v`, {
       stdio: [this.stdin, this.stdout, this.stderr],
       cwd: paths.resolve(path)
     });
 
-    this.serverlessLog(`Maestro ended "${command}" on ${name}`);
+    this.serverlessLog(`Maestro ended "${command}" on "${name}"`);
     this.serverlessLog(
       `##############################################################`
     );
