@@ -2,6 +2,7 @@
 const paths = require("path");
 const { execSync } = require("child_process");
 const figlet = require("figlet");
+const _ = require("lodash");
 
 class MaestroPlugin {
   constructor(serverless, options) {
@@ -16,10 +17,11 @@ class MaestroPlugin {
 
     this.commands = {
       maestro: {
-        usage: 'Just run "sls maestro play" ',
+        lifecycleEvents: ["run"],
+        usage: 'Just run "sls maestro" ',
         commands: {
-          play: {
-            lifecycleEvents: ["run"],
+          remove: {
+            lifecycleEvents: ["remove"],
             usage: "Just play"
           }
         }
@@ -27,7 +29,8 @@ class MaestroPlugin {
     };
 
     this.hooks = {
-      "maestro:play:run": this.run.bind(this)
+      "maestro:run": this.run.bind(this),
+      "maestro:remove:remove": this.remove.bind(this)
     };
   }
 
@@ -47,21 +50,40 @@ class MaestroPlugin {
     console.log(project.path);
   }
 
-  run() {
+  loadScreen() {
     this.serverlessLog(
       figlet.textSync("Maestro --->", {
         font: "Ghost"
-        // horizontalLayout: "default",
-        // verticalLayout: "default"
       })
     );
-    this.maestro.forEach(object => {
-      Object.keys(object).forEach(key => {
-        let project = object[key];
-        project.name = key;
-        if (project.git) {
-          cloneProject();
-        }
+  }
+
+  run() {
+    this.loadScreen();
+    _.forEach(this.maestro, value => {
+      _.forEach(value, (val, key) => {
+        let project = _.assign(
+          {
+            name: key
+          },
+          val
+        );
+        this.runCommand(project);
+      });
+    });
+  }
+
+  remove() {
+    this.loadScreen();
+    _.forEach(this.maestro, value => {
+      _.forEach(value, (val, key) => {
+        let project = _.assign(
+          {
+            name: key
+          },
+          val,
+          { commands: ["sls remove -v"] }
+        );
         this.runCommand(project);
       });
     });
