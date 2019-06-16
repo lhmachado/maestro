@@ -1,6 +1,6 @@
 {
   "name": "maestro-serverless-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Serverless plug-in to orchestrate multiple sls projects",
   "main": "index.js",
   "dependencies": {
